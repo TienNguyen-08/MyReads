@@ -1,34 +1,19 @@
 import "../css/App.css"
 import { useState } from "react"
 import { ListBook } from "./ListBook"
+import { SearchBook } from "./SearchBook"
 function App() {
   const [showSearchPage, setShowSearchpage] = useState(false)
-
+  const onpenSearch = () => {
+    setShowSearchpage(!showSearchPage);
+  }
   return (
     <div className="app">
       {showSearchPage ? (
-        <div className="search-books">
-          <div className="search-books-bar">
-            <a
-              className="close-search"
-              onClick={() => setShowSearchpage(!showSearchPage)}
-            >
-              Close
-            </a>
-            <div className="search-books-input-wrapper">
-              <input
-                type="text"
-                placeholder="Search by title, author, or ISBN"
-              />
-            </div>
-          </div>
-          <div className="search-books-results">
-            <ol className="books-grid"></ol>
-          </div>
-        </div>
+        <SearchBook onpenSearch={onpenSearch}/>
       )
 : (
-        <ListBook/>
+        <ListBook onpenSearch={onpenSearch}/>
       )}
     </div>
   )
