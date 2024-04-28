@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { CategoryBook } from './CategoryBook'
 import * as BooksApi from '../service/BooksAPI';
-const typeBook = {
-  currentlyReading : "Currently Reading",
-  wantToRead : "Want To Read",
-  read: "Read"
-}
+
 export const ListBook = (props) => {
-    
+  const typeBook = {
+    currentlyReading : "Currently Reading",
+    wantToRead : "Want To Read",
+    read: "Read"
+  }
+
+  
     useEffect( async () => {
       const books = await BooksApi.getAll();
       console.log(books);
