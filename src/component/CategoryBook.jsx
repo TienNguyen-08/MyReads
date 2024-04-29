@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import BooksApi from '../service/BooksAPI';
 import { TypeBook } from './TypeBook';
-export const CategoryBook = (props) => {
+export const CategoryBook = ({books, type}) => {
+  const [bookshelf, setBookshelf] = useState([]);
     useEffect(()=>{
-        // const book = BooksApi.get
+      console.log(books);
+        // let categoryBooks = books.filter((book) => book.)
     }, []);
     return (
         <div>
             <div className="bookshelf">
-                <h2 className="bookshelf-title">{props.tittel}</h2>
+                <h2 className="bookshelf-title">{type.value}</h2>
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                     <li>

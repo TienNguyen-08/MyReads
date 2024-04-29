@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import * as BooksApi from '../service/BooksAPI';
-import { TypeBook } from './TypeBook';
 import { useDebounce } from '../customehook/useDebounce';
+import { Book } from './Book';
 export const SearchBook = (props) => {
     const [resultBooks, setResultBooks] = useState([]);
     const [keySearch, setKeySearch] = useState('');
-    const searchTerm = useDebounce(keySearch, 500);
 
     const handleChange = (event) => {
       const newValue = event.target.value;
       setKeySearch(newValue);
     }
-
-    const getAuthors = (book) => book.authors && book.authors.join(', ');
   
     useEffect(() => {
       const getBooks = async () => {
+      let searchTerm = useDebounce(keySearch, 300);
+        
         if(searchTerm) {
-          console.log(searchTerm);
           try {
             if (keySearch.length > 0) {
               const books = await BooksApi.search(keySearch.trim());
@@ -57,24 +55,9 @@ export const SearchBook = (props) => {
         <div className="search-books-results">
           <ol className="books-grid">
             {
-              (resultBooks.length > 0 && resultBooks.map(book => (
-                <div key={book.id} className="book">
-                  <div className="book-top">
-                    <div
-                      className="book-cover"
-                      style={{
-                        width: 128,
-                        height: 188,
-                        backgroundImage:
-                          `url(${book.imageLinks && book.imageLinks.thumbnail})`,
-                      }}
-                    ></div>
-                    <TypeBook/>
-                  </div>
-                  <div className="book-title">{book.title}</div>
-                  <div className="book-authors">{getAuthors(book)}</div>
-                </div>
-              )))
+              (resultBooks.length > 0 && resultBooks.map(book => 
+                <Book book={book}/>
+              ))
             }
           </ol>
         </div>
