@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { CategoryBook } from './CategoryBook'
+import { Link } from 'react-router-dom';
 
 export const ListBook = ({onpenSearch, books, typeBook, onUpdateShelf}) => {
   
@@ -22,7 +23,7 @@ export const ListBook = ({onpenSearch, books, typeBook, onUpdateShelf}) => {
             </div>
           </div>
           <div className="open-search">
-            <a onClick={() => {onpenSearch()}}>Add a book</a>
+            <Link to='/search'/>
           </div>
         </div>
     )
