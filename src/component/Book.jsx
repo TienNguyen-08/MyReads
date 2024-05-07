@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TypeBook } from './TypeBook'
 
-export const Book = ({book}) => {
+export const Book = ({book, onUpdateShelf}) => {
     const getAuthors = (book) => book.authors && book.authors.join(', ');
     return (
         <div>
-            <div key={book.id} className="book">
+            <div className="book">
                 <div className="book-top">
                 <div
                     className="book-cover"
@@ -16,7 +16,7 @@ export const Book = ({book}) => {
                         `url(${book.imageLinks && book.imageLinks.thumbnail})`,
                     }}
                 ></div>
-                <TypeBook/>
+                <TypeBook book={book} onUpdateShelf={onUpdateShelf}/>
                 </div>
                 <div className="book-title">{book.title}</div>
                 <div className="book-authors">{getAuthors(book)}</div>

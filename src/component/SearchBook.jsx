@@ -2,27 +2,30 @@ import React, { useEffect, useState } from 'react';
 import * as BooksApi from '../service/BooksAPI';
 import { useDebounce } from '../customehook/useDebounce';
 import { Book } from './Book';
-export const SearchBook = (props) => {
+export const SearchBook = ({onpenSearch, onUpdateShelf}) => {
     const [resultBooks, setResultBooks] = useState([]);
     const [keySearch, setKeySearch] = useState('');
+    const searchTerm = useDebounce(keySearch, 200);
+    let timeoutId = null;
+
 
     const handleChange = (event) => {
       const newValue = event.target.value;
       setKeySearch(newValue);
+
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     }
   
     useEffect(() => {
-      const getBooks = async () => {
-      let searchTerm = useDebounce(keySearch, 300);
-        
+      const getBooks = () => {
         if(searchTerm) {
           try {
-            if (keySearch.length > 0) {
-              const books = await BooksApi.search(keySearch.trim());
+              timeoutId = setTimeout( async()=> {
+                const books = await BooksApi.search(keySearch.trim());
               setResultBooks(books) // Update state directly (no need for conditional)
-            } else {
-              setResultBooks([]); // Set empty array for no results
-            }
+              }, 800);
           } catch (error) {
             setResultBooks([]); // Set to null for error handling
           }
@@ -32,14 +35,14 @@ export const SearchBook = (props) => {
       };
     
       getBooks();
-    }, [keySearch]);
+    }, [searchTerm]);
     
     return (
         <div className="search-books">
         <div className="search-books-bar">
           <a
             className="close-search"
-            onClick={() => props.onpenSearch()}
+            onClick={() => onpenSearch()}
           >
             Close
           </a>
@@ -55,8 +58,8 @@ export const SearchBook = (props) => {
         <div className="search-books-results">
           <ol className="books-grid">
             {
-              (resultBooks.length > 0 && resultBooks.map(book => 
-                <Book book={book}/>
+              ((resultBooks.length > 0)  && resultBooks.map(book => 
+                <Book key={book.id} book={book} onUpdateShelf={onUpdateShelf}/>
               ))
             }
           </ol>
