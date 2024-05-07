@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { ListBook } from "./ListBook"
 import { SearchBook } from "./SearchBook"
 import * as BooksApi from '../service/BooksAPI';
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   const [showSearchPage, setShowSearchpage] = useState(false);
@@ -18,7 +19,7 @@ function App() {
 
   const onUpdateShelf = (book, type) => {
     BooksApi.update(book, type).then(listBook => {
-      if(book.shelf === 'none' && shelf !== 'none') {
+      if(book.shelf === 'none' && type !== 'none') {
         setBooks([...books, book]);
       }
 
@@ -26,14 +27,13 @@ function App() {
         if(item.id === book.id) {
           item.shelf = type;
         }
-
         return item;
       });
 
       setBooks([...books, updateBooks]);
 
       if(type === 'none') {
-        const newBooks = books.filter(deleteBook => deleteBook.id !== book.id);
+        const newBooks = books.filter(item => item.id !== book.id);
         setBooks([...books, newBooks]);
       }
     })
@@ -46,12 +46,10 @@ function App() {
 
   return (
     <div className="app">
-      {showSearchPage ? (
-        <SearchBook onpenSearch={onpenSearch} onUpdateShelf={onUpdateShelf}/>
-      )
-: (
-        <ListBook onpenSearch={onpenSearch} books={books} typeBook={typeBook} onUpdateShelf={onUpdateShelf}/>
-      )}
+      <Routes>
+        <Route path='/search' element={<SearchBook onpenSearch={onpenSearch} onUpdateShelf={onUpdateShelf}/>}/>
+        <Route exact path='/' element={<ListBook onpenSearch={onpenSearch} books={books} typeBook={typeBook} onUpdateShelf={onUpdateShelf}/>}/>
+      </Routes>
     </div>
   )
 }

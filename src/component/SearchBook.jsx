@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import * as BooksApi from '../service/BooksAPI';
 import { useDebounce } from '../customehook/useDebounce';
 import { Book } from './Book';
+import { Link } from 'react-router-dom';
 export const SearchBook = ({onpenSearch, onUpdateShelf}) => {
     const [resultBooks, setResultBooks] = useState([]);
     const [keySearch, setKeySearch] = useState('');
     const searchTerm = useDebounce(keySearch, 200);
     let timeoutId = null;
 
+    const resetKeySearch = () => {
+      setKeySearch('');
+      setResultBooks([]);
+    }
 
     const handleChange = (event) => {
       const newValue = event.target.value;
@@ -40,12 +45,7 @@ export const SearchBook = ({onpenSearch, onUpdateShelf}) => {
     return (
         <div className="search-books">
         <div className="search-books-bar">
-          <a
-            className="close-search"
-            onClick={() => onpenSearch()}
-          >
-            Close
-          </a>
+        <Link to="/"><button className="close-search" onClick={resetKeySearch} >Close</button></Link>
           <div className="search-books-input-wrapper">
             <input
               type="text"
